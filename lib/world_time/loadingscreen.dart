@@ -12,8 +12,7 @@ class LoadingScreen2 extends StatefulWidget {
 class _LoadingScreen2State extends State<LoadingScreen2> {
   Map data = {};
   void setUpWorldTime() async {
-    WorldTime newtime =
-        WorldTime(location: 'Nigeria', url: 'Africa/Lagos', isChecked: false);
+    WorldTime newtime = WorldTime(location: 'Nigeria', url: 'Africa/Lagos');
     await newtime.getWorldTime();
     Navigator.pushReplacementNamed(context, '/worldtime', arguments: {
       'clocktime': newtime.clocktime,
@@ -24,7 +23,6 @@ class _LoadingScreen2State extends State<LoadingScreen2> {
       'month': newtime.month,
       'year': newtime.year,
       'location': newtime.location,
-      'isChecked': newtime.isChecked,
     });
   }
 

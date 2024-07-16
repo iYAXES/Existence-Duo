@@ -14,9 +14,10 @@ class WorldTime {
   String? year;
   String? am_pm;
   bool? isDayTime;
-  bool? isChecked;
-  WorldTime(
-      {required this.location, required this.url, required this.isChecked});
+  WorldTime({
+    required this.location,
+    required this.url,
+  });
 
   Future<void> getWorldTime() async {
     Response response =

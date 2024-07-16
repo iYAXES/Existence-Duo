@@ -212,14 +212,14 @@ class _WeatherHomeState extends State<WeatherHome> {
                     ],
                   )),
               SizedBox(
-                height: 10,
+                height: 15,
               ),
               Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(15),
                   color: Colors.blueGrey[600],
                 ),
-                height: 140,
+                height: 130,
                 child: Column(
                   children: [
                     Expanded(

@@ -9,31 +9,27 @@ class ChooseLocation2 extends StatefulWidget {
 }
 
 class _ChooseLocation2State extends State<ChooseLocation2> {
-  List<WorldTime> locations = [
-    WorldTime(location: 'Lagos', url: 'Africa/Lagos', isChecked: false),
-    WorldTime(location: 'Chicago', url: 'America/Chicago', isChecked: false),
-    WorldTime(location: 'London', url: 'Europe/London', isChecked: false),
-    WorldTime(location: 'Qatar', url: 'Asia/Qatar', isChecked: false),
-    WorldTime(location: 'NewYork', url: 'America/New_York', isChecked: false),
-    WorldTime(location: 'Germany', url: 'Europe/Berlin', isChecked: false),
-    WorldTime(location: 'Egypt', url: 'Africa/Cairo', isChecked: false),
-    WorldTime(location: 'South Korea', url: 'Asia/Seoul', isChecked: false),
-    WorldTime(
-        location: 'Australia', url: 'Australia/Melbourne', isChecked: false),
-    WorldTime(location: 'Dubai', url: 'Asia/Dubai', isChecked: false),
-    WorldTime(
-        location: 'South Africa', url: 'Africa/Johannesburg', isChecked: false),
-    WorldTime(
-        location: 'Argentina',
-        url: 'America/Argentina/Salta',
-        isChecked: false),
-    WorldTime(location: 'Palmer', url: 'Antarctica/Palmer', isChecked: false),
-    WorldTime(location: 'Bangkok', url: 'Asia/Bangkok', isChecked: false),
-    WorldTime(location: 'Atlantic', url: 'Atlantic/Canary', isChecked: false),
-    WorldTime(location: 'Istanbul', url: 'Europe/Istanbul', isChecked: false),
-    WorldTime(location: 'Tahiti', url: 'Pacific/Tahiti', isChecked: false),
-  ];
+  Map localtime = {};
 
+  List<WorldTime> locations = [
+    WorldTime(location: 'Lagos', url: 'Africa/Lagos'),
+    WorldTime(location: 'Chicago', url: 'America/Chicago'),
+    WorldTime(location: 'London', url: 'Europe/London'),
+    WorldTime(location: 'Qatar', url: 'Asia/Qatar'),
+    WorldTime(location: 'NewYork', url: 'America/New_York'),
+    WorldTime(location: 'Germany', url: 'Europe/Berlin'),
+    WorldTime(location: 'Egypt', url: 'Africa/Cairo'),
+    WorldTime(location: 'South Korea', url: 'Asia/Seoul'),
+    WorldTime(location: 'Australia', url: 'Australia/Melbourne'),
+    WorldTime(location: 'Dubai', url: 'Asia/Dubai'),
+    WorldTime(location: 'South Africa', url: 'Africa/Johannesburg'),
+    WorldTime(location: 'Argentina', url: 'America/Argentina/Salta'),
+    WorldTime(location: 'Palmer', url: 'Antarctica/Palmer'),
+    WorldTime(location: 'Bangkok', url: 'Asia/Bangkok'),
+    WorldTime(location: 'Atlantic', url: 'Atlantic/Canary'),
+    WorldTime(location: 'Istanbul', url: 'Europe/Istanbul'),
+    WorldTime(location: 'Tahiti', url: 'Pacific/Tahiti'),
+  ];
   void updateTime(index) async {
     WorldTime newtime = locations[index];
     await newtime.getWorldTime();
@@ -48,23 +44,23 @@ class _ChooseLocation2State extends State<ChooseLocation2> {
     });
   }
 
-  bool? isChecked = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.onSecondary,
       body: Container(
-        padding: EdgeInsets.fromLTRB(15, 80, 15, 0),
+        padding: EdgeInsets.fromLTRB(10, 80, 10, 0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Row(
-              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Choose Location',
+                  'Select Location',
                   style: TextStyle(fontFamily: 'Montserrat', fontSize: 20),
                 ),
+                IconButton(onPressed: () {}, icon: Icon(Icons.refresh))
               ],
             ),
             Divider(color: Colors.grey, thickness: 1),
@@ -74,8 +70,10 @@ class _ChooseLocation2State extends State<ChooseLocation2> {
                 scrollDirection: Axis.vertical,
                 itemBuilder: (context, index) {
                   return Card(
-                    color: Theme.of(context).colorScheme.onSecondary,
-                    elevation: 0,
+                    color: Theme.of(context).colorScheme.background,
+                    elevation: 1,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15)),
                     child: ListTile(
                       trailing: Icon(
                         Icons.arrow_forward_ios_rounded,
@@ -86,6 +84,7 @@ class _ChooseLocation2State extends State<ChooseLocation2> {
                         '${locations[index].location}',
                         style: TextStyle(fontFamily: 'Montserrat bold'),
                       ),
+                      subtitle: Text(''),
                       onTap: () {
                         updateTime(index);
                       },
