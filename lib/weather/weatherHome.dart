@@ -262,17 +262,19 @@ class _WeatherHomeState extends State<WeatherHome> {
                         onTap: () async {
                           dynamic data = await Navigator.pushNamed(
                               context, '/weatherlocation');
-                          setState(() {
-                            W_data = {
-                              'location': data['location'],
-                              'condition': data['condition'],
-                              'tempC': data['tempC'],
-                              'heatlevel': data['heatlevel'],
-                              'cloudlevel': data['cloudlevel'],
-                              'getHour': data['getHour'],
-                              'getDay': data['getDay'],
-                            };
-                          });
+                          if (data != null) {
+                            setState(() {
+                              W_data = {
+                                'location': data['location'],
+                                'condition': data['condition'],
+                                'tempC': data['tempC'],
+                                'heatlevel': data['heatlevel'],
+                                'cloudlevel': data['cloudlevel'],
+                                'getHour': data['getHour'],
+                                'getDay': data['getDay'],
+                              };
+                            });
+                          }
                         },
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
