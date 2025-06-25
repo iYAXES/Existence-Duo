@@ -56,6 +56,7 @@ class _ChooseLocationState extends State<ChooseLocation> {
     LocationName(name: ' Houston  '),
     LocationName(name: ' Istanbul  '),
     LocationName(name: ' Jakarta  '),
+    LocationName(name: ' Japan'),
     LocationName(name: ' Johannesburg  '),
     LocationName(name: ' Karachi  '),
     LocationName(name: ' Kathmandu  '),
