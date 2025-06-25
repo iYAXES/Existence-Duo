@@ -10,7 +10,6 @@ class LoadingScreen2 extends StatefulWidget {
 }
 
 class _LoadingScreen2State extends State<LoadingScreen2> {
-  Map data = {};
   void setUpWorldTime() async {
     WorldTime newtime = WorldTime(location: 'Nigeria', url: 'Africa/Lagos');
     await newtime.getWorldTime();
@@ -36,11 +35,11 @@ class _LoadingScreen2State extends State<LoadingScreen2> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.background,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: Center(
         child: SpinKitPouringHourGlassRefined(
           color: Theme.of(context).colorScheme.onPrimary,
-          size: 90,
+          size: 60,
         ),
       ),
     );

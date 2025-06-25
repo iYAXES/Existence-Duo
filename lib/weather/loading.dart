@@ -21,6 +21,9 @@ class _LoadingState extends State<Loading> {
       getDay = weather.forecastday;
       //double forecastDay = getDay[0]['day']['maxtemp_c'];
     });
+    //DateTime now = DateTime.now();
+    //bool isDayTime = now.hour > 6 && now.hour < 19 ? true : false;
+
     Navigator.pushReplacementNamed(context, '/home', arguments: {
       'location': weather.location,
       'condition': weather.conditon,
@@ -29,6 +32,7 @@ class _LoadingState extends State<Loading> {
       'cloudlevel': weather.cloudlevel,
       'getHour': getHour,
       'getDay': getDay,
+      // 'isDayTime': isDayTime,
     });
   }
 
@@ -45,7 +49,7 @@ class _LoadingState extends State<Loading> {
       body: Center(
         child: SpinKitFadingCircle(
           color: Colors.white,
-          size: 80,
+          size: 60,
         ),
       ),
     );

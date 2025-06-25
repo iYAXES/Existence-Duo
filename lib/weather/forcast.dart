@@ -3,7 +3,6 @@ import 'package:intl/intl.dart';
 
 class Forcast extends StatefulWidget {
   const Forcast({super.key});
-
   @override
   State<Forcast> createState() => _ForcastState();
 }
@@ -23,24 +22,17 @@ class _ForcastState extends State<Forcast> {
     int rainy = forcast['getDay'][1]['day']['daily_chance_of_rain'];
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.onSecondary,
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text(
-          'Forecast',
-          style: TextStyle(fontFamily: 'Montserrat bold', fontSize: 18),
-        ),
-        backgroundColor: Theme.of(context).colorScheme.onSecondary,
-        elevation: 0,
-      ),
       body: Container(
-        padding: EdgeInsets.fromLTRB(10, 5, 10, 0),
+        padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Container(
-              height: 350,
+              height: 410,
               decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15),
+                  borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(45),
+                      bottomRight: Radius.circular(45)),
                   gradient: LinearGradient(
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
@@ -53,11 +45,33 @@ class _ForcastState extends State<Forcast> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   SizedBox(
-                    height: 40,
+                    height: 25,
                   ),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
+                      SizedBox(
+                        width: 10,
+                      ),
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: Icon(
+                          Icons.arrow_back_ios_new_rounded,
+                          size: 15,
+                          color: Colors.white,
+                        ),
+                        style: ElevatedButton.styleFrom(
+                            padding: EdgeInsets.all(5),
+                            backgroundColor: Colors.transparent,
+                            shape: CircleBorder(
+                                side: BorderSide(
+                                    width: 1.5, color: Colors.white))),
+                      ),
+                      SizedBox(
+                        width: 90,
+                      ),
                       Icon(
                         Icons.calendar_month,
                         color: Colors.white,
@@ -73,14 +87,14 @@ class _ForcastState extends State<Forcast> {
                     ],
                   ),
                   SizedBox(
-                    height: 30,
+                    height: 50,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Expanded(
                         child: Container(
-                          height: 100,
+                          height: 150,
                           child: Image.network(
                             'https:$icon',
                             fit: BoxFit.contain,
@@ -88,14 +102,12 @@ class _ForcastState extends State<Forcast> {
                         ),
                         flex: 1,
                       ),
-                      SizedBox(
-                        width: 10,
-                      ),
                       Expanded(
                         child: Container(
-                          height: 100,
+                          height: 150,
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
                               Text(
                                 'Tommorow',
@@ -104,34 +116,33 @@ class _ForcastState extends State<Forcast> {
                                     fontFamily: 'Montserrat',
                                     fontSize: 16),
                               ),
-                              SizedBox(
-                                height: 8,
-                              ),
                               Row(
                                 children: [
                                   Text(
                                     '$tomWeda'.substring(0, 2),
                                     style: TextStyle(
-                                        fontSize: 44,
+                                        fontSize: 70,
                                         fontFamily: 'Howvetical',
                                         color: Colors.white),
                                   ),
                                   Text(
                                     '/' + '$tomWeda2'.substring(0, 2) + '°',
                                     style: TextStyle(
-                                        fontSize: 24,
+                                        fontSize: 30,
                                         fontFamily: 'Montserrat bold',
-                                        color: Colors.white),
+                                        color: Colors.grey.shade300),
                                   ),
                                 ],
                               ),
-                              Text(
-                                condition,
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontFamily: 'Montserrat',
-                                    fontSize: 16),
-                              )
+                              FittedBox(
+                                child: Text(
+                                  condition,
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontFamily: 'Montserrat',
+                                      fontSize: 16),
+                                ),
+                              ),
                             ],
                           ),
                         ),
@@ -220,7 +231,7 @@ class _ForcastState extends State<Forcast> {
                         ],
                       ),
                     ],
-                  )
+                  ),
                 ],
               ),
             ),

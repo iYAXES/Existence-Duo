@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:world_and_weather_app/weather/weatherService.dart';
+import 'package:provider/provider.dart';
+import 'package:world_and_weather_app/provider_test.dart';
 
 class WeatherHome extends StatefulWidget {
   const WeatherHome({super.key});
@@ -19,23 +21,51 @@ class _WeatherHomeState extends State<WeatherHome> {
     W_data = W_data.isNotEmpty
         ? W_data
         : ModalRoute.of(context)?.settings.arguments as Map;
+    //String isDayTime = W_data['isDayTime'] ? 'bg.jpg' : 'bg1.jpg';
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.background,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: Container(
         decoration: BoxDecoration(
-          image: DecorationImage(
-              image: AssetImage('assets/bg1.jpg'), fit: BoxFit.cover),
-        ),
+            gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+              Theme.of(context).colorScheme.onSecondary,
+              Theme.of(context).colorScheme.surface,
+              Theme.of(context).colorScheme.surface,
+            ])),
         child: Padding(
-          padding: EdgeInsets.fromLTRB(10, 70, 10, 0),
+          padding: EdgeInsets.fromLTRB(10, 40, 10, 0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Existence Duo',
+                    style: TextStyle(fontFamily: 'Howvetical', fontSize: 20),
+                  ),
+                  IconButton(
+                      onPressed: () {
+                        Provider.of<ThemeProvider>(context, listen: false)
+                            .toggleTheme();
+                      },
+                      icon: Icon(
+                        Icons.nightlight,
+                        size: 24,
+                        color: Theme.of(context).colorScheme.onPrimary,
+                      )),
+                ],
+              ),
+              SizedBox(
+                height: 50,
+              ),
               Text(
                 '${W_data['location']}',
                 style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 30,
+                  color: Theme.of(context).colorScheme.onPrimary,
+                  fontSize: 25,
                   fontFamily: 'Montserrat bold',
                 ),
               ),
@@ -45,9 +75,9 @@ class _WeatherHomeState extends State<WeatherHome> {
                   Text(
                     '${W_data['tempC']}'.substring(0, 2),
                     style: TextStyle(
-                        fontSize: 85,
+                        fontSize: 100,
                         fontFamily: 'Montserrat',
-                        color: Colors.white,
+                        color: Theme.of(context).colorScheme.onPrimary,
                         fontWeight: FontWeight.w700),
                   ),
                   Container(
@@ -56,7 +86,7 @@ class _WeatherHomeState extends State<WeatherHome> {
                       '℃',
                       style: TextStyle(
                           fontFamily: 'Montserrat bold',
-                          color: Colors.white,
+                          color: Theme.of(context).colorScheme.onPrimary,
                           fontSize: 30),
                     ),
                   )
@@ -69,7 +99,7 @@ class _WeatherHomeState extends State<WeatherHome> {
                     style: TextStyle(
                       fontSize: 24,
                       fontFamily: 'Montserrat',
-                      color: Colors.white,
+                      color: Theme.of(context).colorScheme.onPrimary,
                     ),
                   ),
                 ),
@@ -82,7 +112,7 @@ class _WeatherHomeState extends State<WeatherHome> {
                     style: TextStyle(
                       fontSize: 20,
                       fontFamily: 'Montserrat bold',
-                      color: Colors.white,
+                      color: Theme.of(context).colorScheme.onPrimary,
                     ),
                   ),
                 ],
@@ -93,10 +123,10 @@ class _WeatherHomeState extends State<WeatherHome> {
               Container(
                   padding: EdgeInsets.symmetric(vertical: 8, horizontal: 8),
                   decoration: BoxDecoration(
-                      backgroundBlendMode: BlendMode.modulate,
+                      //backgroundBlendMode: BlendMode.modulate,
                       borderRadius: BorderRadius.circular(15),
-                      color: Colors.blueGrey[600]),
-                  height: 165,
+                      color: Theme.of(context).colorScheme.onSecondary),
+                  height: 175,
                   child: Column(
                     children: [
                       Row(
@@ -106,7 +136,7 @@ class _WeatherHomeState extends State<WeatherHome> {
                             'Today',
                             style: TextStyle(
                                 fontSize: 20,
-                                color: Colors.white,
+                                color: Theme.of(context).colorScheme.onPrimary,
                                 fontWeight: FontWeight.w500),
                           ),
                           GestureDetector(
@@ -130,7 +160,8 @@ class _WeatherHomeState extends State<WeatherHome> {
                                 ),
                                 Icon(
                                   Icons.arrow_forward_ios_rounded,
-                                  color: Colors.white,
+                                  color:
+                                      Theme.of(context).colorScheme.onPrimary,
                                   size: 15,
                                 )
                               ],
@@ -142,7 +173,7 @@ class _WeatherHomeState extends State<WeatherHome> {
                         height: 10,
                       ),
                       SizedBox(
-                        height: 110,
+                        height: 115,
                         child: ListView.builder(
                           scrollDirection: Axis.horizontal,
                           physics: BouncingScrollPhysics(),
@@ -154,8 +185,8 @@ class _WeatherHomeState extends State<WeatherHome> {
                             String forecastHour =
                                 W_data['getHour'][index]['time'];
                             DateTime format = DateTime.parse(forecastHour);
-                            String formatHour = DateFormat.j().format(format);
                             //format the forcast show Hours and PM
+                            String formatHour = DateFormat.j().format(format);
                             String forecastTime = W_data['getHour'][index]
                                     ['time']
                                 .substring(11, 13);
@@ -167,7 +198,7 @@ class _WeatherHomeState extends State<WeatherHome> {
 
                             return Container(
                               width: 80,
-                              padding: EdgeInsets.symmetric(vertical: 10),
+                              padding: EdgeInsets.symmetric(vertical: 5),
                               margin: EdgeInsets.only(right: 10),
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(15),
@@ -217,18 +248,18 @@ class _WeatherHomeState extends State<WeatherHome> {
               Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(15),
-                  color: Colors.blueGrey[600],
+                  color: Theme.of(context).colorScheme.onSecondary,
                 ),
                 height: 130,
                 child: Column(
                   children: [
                     Expanded(
                       child: Padding(
-                        padding: const EdgeInsets.fromLTRB(15, 22, 15, 10),
+                        padding: const EdgeInsets.fromLTRB(10, 15, 0, 0),
                         child: ListTile(
                           leading: Icon(
                             Icons.cloudy_snowing,
-                            color: Colors.grey[200],
+                            color: Theme.of(context).colorScheme.onPrimary,
                             size: 50,
                           ),
                           title: Column(
@@ -237,13 +268,15 @@ class _WeatherHomeState extends State<WeatherHome> {
                               Text(
                                 'Get More City Updates.',
                                 style: TextStyle(
-                                  color: Colors.white,
+                                  color:
+                                      Theme.of(context).colorScheme.onPrimary,
                                 ),
                               ),
                               Text(
                                 'Locations, Weather and Condition',
                                 style: TextStyle(
-                                  color: Colors.white,
+                                  color:
+                                      Theme.of(context).colorScheme.onPrimary,
                                 ),
                               ),
                             ],
@@ -253,8 +286,8 @@ class _WeatherHomeState extends State<WeatherHome> {
                       flex: 2,
                     ),
                     Divider(
-                      indent: 100,
-                      color: Colors.white,
+                      indent: 95,
+                      color: Theme.of(context).colorScheme.onPrimary,
                     ),
                     Expanded(
                       child: GestureDetector(
@@ -286,7 +319,8 @@ class _WeatherHomeState extends State<WeatherHome> {
                                 style: TextStyle(
                                   fontSize: 18,
                                   fontFamily: 'Montserrat bold',
-                                  color: Colors.white,
+                                  color:
+                                      Theme.of(context).colorScheme.onPrimary,
                                 ),
                               ),
                               SizedBox(
@@ -294,7 +328,7 @@ class _WeatherHomeState extends State<WeatherHome> {
                               ),
                               Icon(
                                 Icons.arrow_forward_ios_rounded,
-                                color: Colors.white,
+                                color: Theme.of(context).colorScheme.onPrimary,
                                 size: 22,
                               ),
                             ],

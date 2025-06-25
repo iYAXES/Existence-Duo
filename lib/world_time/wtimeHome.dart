@@ -39,11 +39,11 @@ class _WorldTimeHomeState extends State<WorldTimeHome> {
             BottomNavigationBarItem(
                 backgroundColor: Color(0xFF091057),
                 icon: Icon(
-                  Icons.alarm,
+                  Icons.watch_later_outlined,
                 ),
                 label: 'Clock'),
             BottomNavigationBarItem(
-                backgroundColor: Theme.of(context).colorScheme.background,
+                backgroundColor: Theme.of(context).colorScheme.surface,
                 icon: Icon(
                   Icons.list_rounded,
                 ),
@@ -51,9 +51,9 @@ class _WorldTimeHomeState extends State<WorldTimeHome> {
             BottomNavigationBarItem(
                 backgroundColor: Colors.grey[850],
                 icon: Icon(
-                  Icons.exit_to_app,
+                  Icons.cloud,
                 ),
-                label: 'Exit'),
+                label: 'Weather'),
           ]),
     );
   }

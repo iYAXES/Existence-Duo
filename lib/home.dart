@@ -18,32 +18,32 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'Existence Duo',
-          style: TextStyle(
-            fontFamily: 'Howvetical',
-          ),
-        ),
-        backgroundColor: Theme.of(context).colorScheme.background,
-        actions: [
-          IconButton(
-              onPressed: () {
-                Provider.of<ThemeProvider>(context, listen: false)
-                    .toggleTheme();
-              },
-              icon: Icon(
-                Icons.nightlight,
-                size: 24,
-                color: Theme.of(context).colorScheme.onPrimary,
-              ))
-        ],
-      ),
+      // appBar: AppBar(
+      //   title: Text(
+      //     'Existence Duo',
+      //     style: TextStyle(
+      //       fontFamily: 'Howvetical',
+      //     ),
+      //   ),
+      //   backgroundColor: Theme.of(context).colorScheme.surface,
+      //   actions: [
+      //     IconButton(
+      //         onPressed: () {
+      //           Provider.of<ThemeProvider>(context, listen: false)
+      //               .toggleTheme();
+      //         },
+      //         icon: Icon(
+      //           Icons.nightlight,
+      //           size: 24,
+      //           color: Theme.of(context).colorScheme.onPrimary,
+      //         ))
+      //   ],
+      // ),
       body: screens[index],
       bottomNavigationBar: NavigationBarTheme(
           data: NavigationBarThemeData(
             height: 55,
-            labelTextStyle: MaterialStatePropertyAll(TextStyle(
+            labelTextStyle: WidgetStatePropertyAll(TextStyle(
                 color: Theme.of(context).colorScheme.onPrimary,
                 fontSize: 14,
                 fontWeight: FontWeight.w500)),
@@ -55,7 +55,7 @@ class _HomeState extends State<Home> {
                   this.index = index;
                 });
               },
-              backgroundColor: Theme.of(context).colorScheme.background,
+              backgroundColor: Theme.of(context).colorScheme.surface,
               indicatorColor: Colors.grey[200],
               destinations: [
                 NavigationDestination(

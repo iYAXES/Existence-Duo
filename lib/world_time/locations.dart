@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:http/http.dart';
+import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
-import 'package:world_and_weather_app/world_time/worldtime.dart';
+
 import 'dart:convert' as convert;
 
 class ChooseLocation2 extends StatefulWidget {
@@ -18,30 +18,38 @@ class _ChooseLocation2State extends State<ChooseLocation2> {
   List<String> formattedLocations = [];
 
   Future<void> getAllzone() async {
-    Response response =
-        await get(Uri.parse('http://worldtimeapi.org/api/timezone'));
-    List<String> zones = List<String>.from(convert.jsonDecode(response.body));
+    try {
+      var response = await http.get(
+          Uri.parse('https://www.timeapi.io/api/timezone/availabletimezones'));
+      List<String> zones = List<String>.from(convert.jsonDecode(response.body));
+      if (response.statusCode == 200) {
+        //Format locations and Sort Aphalbetically
+        List<String> formatedZones =
+            zones.map((zone) => formatLocations(zone)).toList();
+        formatedZones.sort((a, b) => a.compareTo(b));
 
-    //Format locations and Sort Aphalbetically
-    List<String> formatedZones =
-        zones.map((zone) => formatLocations(zone)).toList();
-    formatedZones.sort((a, b) => a.compareTo(b));
-
-    setState(() {
-      originalLocations = zones;
-      formattedLocations = formatedZones;
-    });
+        setState(() {
+          originalLocations = zones;
+          formattedLocations = formatedZones;
+        });
+      } else {
+        "Unable to get Data ${response.statusCode}";
+      }
+    } catch (e) {
+      rethrow;
+    }
   }
 
   Future<Map<String, dynamic>> getAlltime(String urls) async {
     try {
-      Response response =
-          await get(Uri.parse('http://worldtimeapi.org/api/timezone/$urls'));
+      var uri = Uri.https(
+          'www.timeapi.io', '/api/time/current/zone', {'timeZone': urls});
+      var response = await http.get(uri);
       Map data = convert.jsonDecode(response.body);
-      String datetime = data['datetime'];
-      String offset = data['utc_offset'].substring(1, 3);
+      String datetime = data['dateTime'];
+      //String offset = data['utc_offset'].substring(1, 3);
       DateTime now = DateTime.parse(datetime);
-      now = now.add(Duration(hours: int.parse(offset)));
+      // now = now.add(Duration(hours: int.parse(offset)));
       String time = DateFormat.jm().format(now);
       String weekDay = DateFormat('EEEE').format(now);
       dynamic clocktime = now;
@@ -61,11 +69,13 @@ class _ChooseLocation2State extends State<ChooseLocation2> {
     }
   }
 
+  //To Split the extesion names of the Zone
   String formatLocations(String locationZone) {
     List<String> split = locationZone.split('/');
     return split.isNotEmpty ? split.last.replaceAll('_', ' ') : locationZone;
   }
 
+  //To check if the location zone corresponds with the time
   String getOriginalLocation(String formattedLocation) {
     return originalLocations
         .firstWhere((zone) => formatLocations(zone) == formattedLocation);
@@ -73,7 +83,6 @@ class _ChooseLocation2State extends State<ChooseLocation2> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     getAllzone();
   }
@@ -84,6 +93,7 @@ class _ChooseLocation2State extends State<ChooseLocation2> {
       backgroundColor: Theme.of(context).colorScheme.onSecondary,
       appBar: AppBar(
         elevation: 0,
+        scrolledUnderElevation: 0,
         backgroundColor: Theme.of(context).colorScheme.onSecondary,
         title: Text(
           'Select Location',
@@ -121,6 +131,7 @@ class _ChooseLocation2State extends State<ChooseLocation2> {
                       itemBuilder: (context, index) {
                         //Formating Location Name to Look User Friendly
                         String locationName = formattedLocations[index];
+                        //To get All timeZONES corresponding to formamattedLocations
                         String originalLocation =
                             getOriginalLocation(locationName);
                         return FutureBuilder(
@@ -147,8 +158,7 @@ class _ChooseLocation2State extends State<ChooseLocation2> {
                                 );
                               } else {
                                 return Card(
-                                  color:
-                                      Theme.of(context).colorScheme.background,
+                                  color: Theme.of(context).colorScheme.surface,
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(15)),
                                   child: ListTile(
@@ -215,6 +225,28 @@ class CustomSearchDelegate2 extends SearchDelegate {
       required this.getOriginalLocations,
       required this.getAlltime});
 
+  @override
+  ThemeData appBarTheme(BuildContext context) {
+    return ThemeData(
+      appBarTheme: AppBarTheme(
+        scrolledUnderElevation: 0,
+        backgroundColor: Theme.of(context).colorScheme.onSecondary,
+        elevation: 0,
+        iconTheme:
+            IconThemeData(color: Theme.of(context).colorScheme.onPrimary),
+      ),
+      textTheme: TextTheme(
+          titleLarge: TextStyle(
+              color: Theme.of(context).colorScheme.onPrimary,
+              fontSize: 16,
+              fontFamily: 'Montserrat')),
+      inputDecorationTheme: const InputDecorationTheme(
+        border: InputBorder.none,
+        hintStyle: TextStyle(color: Colors.grey),
+      ),
+    );
+  }
+
   List<Widget> buildActions(BuildContext context) {
     return [
       IconButton(
@@ -240,36 +272,39 @@ class CustomSearchDelegate2 extends SearchDelegate {
         matchQuery.add(location);
       }
     }
-    return ListView.builder(
-      itemCount: matchQuery.length,
-      itemBuilder: (context, index) {
-        var result = matchQuery[index];
-        return Card(
-          color: Colors.transparent,
-          elevation: 0,
-          //shape: Border(top: BorderSide(color: Colors.grey)),
-          child: ListTile(
-            title: Text(
-              result,
-              style: TextStyle(fontFamily: 'Montserrat'),
+    return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.surface,
+      body: ListView.builder(
+        itemCount: matchQuery.length,
+        itemBuilder: (context, index) {
+          var result = matchQuery[index];
+          return Card(
+            color: Colors.transparent,
+            elevation: 0,
+            //shape: Border(top: BorderSide(color: Colors.grey)),
+            child: ListTile(
+              title: Text(
+                result,
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
+              onTap: () async {
+                String originalLocation = getOriginalLocations(result);
+                Map<String, dynamic> data = await getAlltime(originalLocation);
+                close(context, null);
+                Navigator.popAndPushNamed(context, '/worldtime', arguments: {
+                  'location': result,
+                  'time': data['time'],
+                  'day': data['day'],
+                  'clocktime': data['clocktime'],
+                  'weekDay': data['weekDay'],
+                  'month': data['month'],
+                  'year': data['year'],
+                });
+              },
             ),
-            onTap: () async {
-              String originalLocation = getOriginalLocations(result);
-              Map<String, dynamic> data = await getAlltime(originalLocation);
-              close(context, null);
-              Navigator.popAndPushNamed(context, '/worldtime', arguments: {
-                'location': result,
-                'time': data['time'],
-                'day': data['day'],
-                'clocktime': data['clocktime'],
-                'weekDay': data['weekDay'],
-                'month': data['month'],
-                'year': data['year'],
-              });
-            },
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 
@@ -280,36 +315,39 @@ class CustomSearchDelegate2 extends SearchDelegate {
         matchQuery.add(location);
       }
     }
-    return ListView.builder(
-      itemCount: matchQuery.length,
-      itemBuilder: (context, index) {
-        var result = matchQuery[index];
-        return Card(
-          color: Colors.transparent,
-          elevation: 0,
-          //shape: Border(top: BorderSide(color: Colors.grey)),
-          child: ListTile(
-            title: Text(
-              result,
-              style: TextStyle(fontFamily: 'Montserrat'),
+    return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.surface,
+      body: ListView.builder(
+        itemCount: matchQuery.length,
+        itemBuilder: (context, index) {
+          var result = matchQuery[index];
+          return Card(
+            color: Colors.transparent,
+            elevation: 0,
+            //shape: Border(top: BorderSide(color: Colors.grey)),
+            child: ListTile(
+              title: Text(
+                result,
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
+              onTap: () async {
+                String originalLocation = getOriginalLocations(result);
+                Map<String, dynamic> data = await getAlltime(originalLocation);
+                close(context, null);
+                Navigator.popAndPushNamed(context, '/worldtime', arguments: {
+                  'location': result,
+                  'time': data['time'],
+                  'day': data['day'],
+                  'clocktime': data['clocktime'],
+                  'weekDay': data['weekDay'],
+                  'month': data['month'],
+                  'year': data['year'],
+                });
+              },
             ),
-            onTap: () async {
-              String originalLocation = getOriginalLocations(result);
-              Map<String, dynamic> data = await getAlltime(originalLocation);
-              close(context, null);
-              Navigator.popAndPushNamed(context, '/worldtime', arguments: {
-                'location': result,
-                'time': data['time'],
-                'day': data['day'],
-                'clocktime': data['clocktime'],
-                'weekDay': data['weekDay'],
-                'month': data['month'],
-                'year': data['year'],
-              });
-            },
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 }
